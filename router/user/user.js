@@ -3,6 +3,9 @@ const router = express.Router();
 const User = require('../../models/user');
 const bodyparser = require('body-parser');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
 const { registerValidation, signinValidation } = require('../../validation');
 
 router.use(bodyparser.json());
@@ -54,11 +57,15 @@ router.post('/signin', async(req, res) => {
     // check if user exist
     const user = await User.findOne({login_id: req.body.login_id});
     if (!user) return res.status(400).send('That user does not exist. Sign up?');
+
     // Compare hashed password
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) return res.status(400).send('Incorrect password. Better luck next time!');
 
-    res.send('Successfully logged in');
+    // Create and assign token
+    const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
+
+    res.header('auth-token', token).send(token);
 });
 
 module.exports = router;
