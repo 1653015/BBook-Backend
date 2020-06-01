@@ -2,15 +2,22 @@ const Joi = require('joi')
 
 const registerValidation = (body) => {
     const registerSchema = {
-        login_id: Joi.string()
-            .min(6)
-            .required(),
-        password: Joi.string()
-            .min(6)
-            .required(),
         email: Joi.string()
             .required()
+            .example('example@email.com')
             .email(),
+        password: Joi.string()
+            .min(6)
+            .example('************')
+            .required(),
+        name: Joi.string()
+            .min(6)
+            .example('Jane Doe')
+            .required(),
+        address: Joi.string()
+                .min(12),
+        phone: Joi.string()
+                .min(9),
     };
 
     return Joi.validate(body, registerSchema);
@@ -18,9 +25,9 @@ const registerValidation = (body) => {
 
 const signinValidation = (body) => {
     const signinSchema = {
-        login_id: Joi.string()
+        email: Joi.string()
             .min(6)
-            .required(),
+            .email(),
         password: Joi.string()
             .min(6)
             .required(),

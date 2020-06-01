@@ -3,23 +3,39 @@ const bcrypt = require('bcrypt'),
 	SALT_WORK_FACTOR = 10;
 
 const user = mongoose.Schema({
-    username: {
+    email: {
         type: String,
         required: true,
+        unique: true
     },
     password: {
         type: String,
         required: true,
     },
-    email: {
+    name: {
         type: String,
         required: true,
+    },
+    address: {
+        type: String,
+        default: ""
+    },
+    phone: {
+        type: String,
+        default: ""
     },
     date: {
         type: Date,
         default: Date.now(),
     }
 });
+
+user.methods.comparePassword = function(input, cb) {
+    bcrypt.compare(input, this.password, function(err, isMatch) {
+		if (err) return cb(err);
+		cb(null, isMatch);
+	});
+}
 
 user.pre('save', function(next) {
 	let user = this;

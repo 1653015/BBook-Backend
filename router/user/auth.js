@@ -3,27 +3,48 @@ const jwt = require('jsonwebtoken');
 const { signinValidation } = require('../../validation');
 const express = require('express');
 const router = express.Router();
-const bodyparser = require('body-parser');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-router.post('/', async(req, res) => {
+router.post('/', (req, res, next) => {
     // validate user input
     const { error } = signinValidation(req.body);
-    if (error) return res.status(400).send('Invalid username or password!!!');
+    if (error) return res.status(400).json({
+        success: false,
+        err: error
+    });
 
-    // check if user exist
-    const user = await User.findOne({login_id: req.body.login_id});
-    if (!user) return res.status(400).send('That user does not exist. Sign up?');
+    User
+        .findOne({email: req.body.email})
+        .then((user) => {
+            if (!user) {
+                return res.status(400).json({
+                    success: false,
+                    message: "No user with that email"
+                });
+            }
 
-    // Compare hashed password
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) return res.status(400).send('Incorrect password. Better luck next time!');
+            user.comparePassword(req.body.password, (err, matched) => {
+                console.log(matched);
+                
+                if (!matched) {
+					return res.status(401).json({
+						success: false,
+						message: 'Sai mật khẩu!',
+					});
+                }
+                
+                let token = jwt.sign({ userID: user._id },
+                    process.env.TOKEN_SECRET,
+                );
 
-    // Create and assign token
-    const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
+                return res.status(200).header('x-access-token', token).json({
+                    success: true,
+                    message: "Đăng nhập thành công"
+                });
+            })
 
-    res.header('x-access-token', token).send(token);
+        }).catch(next);
 });
 
 module.exports = router;
