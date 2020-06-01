@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt'),
 	SALT_WORK_FACTOR = 10;
 
 const user = mongoose.Schema({
-    login_id: {
+    username: {
         type: String,
         required: true,
     },
@@ -21,7 +21,7 @@ const user = mongoose.Schema({
     }
 });
 
-UserSchema.pre('save', function(next) {
+user.pre('save', function(next) {
 	let user = this;
 
     // only hash the password if it hasn't been modified (or is new)
