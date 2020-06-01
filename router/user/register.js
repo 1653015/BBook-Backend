@@ -13,30 +13,31 @@ router.post('/email', (req, res, next) => {
         })
     }
 
-    const exist = User.findOne({email: req.body.email});
-    if (exist != null) {
-        return res.status(400).json({
-            success: false,
-            message: "That user already existed"
-        })
-    }
+    User.findOne({email: req.body.email})
+        .then((user) => {
+            if (!user) {
+                 // Actually register user
+                const user = new User({
+                    email: req.body.email,
+                    password: req.body.password,
+                    name: req.body.name,
+                    address: req.body.address,
+                    phone: req.body.phone
+                });
 
-
-    // Actually register user
-    const user = new User({
-        email: req.body.email,
-        password: req.body.password,
-        name: req.body.name,
-        address: req.body.address,
-        phone: req.body.phone
-    });
-
-    user.save().then(() => {
-        res.status(200).json({
-            success: true,
-            message: "Successfully registered."
-        });
-    }).catch(next);
+                user.save().then(() => {
+                    res.status(200).json({
+                        success: true,
+                        message: "Successfully registered."
+                    });
+                })
+            } else {
+                return res.status(400).json({
+                    success: false,
+                    message: "user already exist"
+                })
+            }
+        }).catch(next);
 });
 
 module.exports = router

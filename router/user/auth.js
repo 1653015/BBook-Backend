@@ -40,7 +40,7 @@ router.post('/signin', (req, res, next) => {
                 );
 
                 return res.status(200)
-                    .cookie("name", user.name, {maxAge: 36000000})
+                    .cookie("mUser", user.name, {maxAge: 36000000})
                     .header("x-access-token", token)
                     .json({
                         success: true,
