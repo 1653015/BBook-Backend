@@ -14,12 +14,13 @@ router.post('/email', (req, res, next) => {
     }
 
     const exist = User.findOne({email: req.body.email});
-    if (exist) {
+    if (exist != null) {
         return res.status(400).json({
             success: false,
             message: "That user already existed"
         })
     }
+
 
     // Actually register user
     const user = new User({
