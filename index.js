@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const router = require('./router/api');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -13,10 +14,11 @@ app.use('/', router);
 // Use Middlewares
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // Create connection to the database
 mongoose.connect(
-    process.env.TEST_CONNECTION_STRING,
+    process.env.DB_CONNECTION_STRING,
     { useNewUrlParser: true,
         useUnifiedTopology: true },
     () => { console.log('DB ready'); }

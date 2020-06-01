@@ -6,7 +6,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-router.post('/', (req, res, next) => {
+router.post('/signin', (req, res, next) => {
     // validate user input
     const { error } = signinValidation(req.body);
     if (error) return res.status(400).json({
@@ -36,15 +36,24 @@ router.post('/', (req, res, next) => {
                 
                 let token = jwt.sign({ userID: user._id },
                     process.env.TOKEN_SECRET,
+                    { expiresIn: '24h' }
                 );
 
-                return res.status(200).header('x-access-token', token).json({
-                    success: true,
-                    message: "Đăng nhập thành công"
-                });
+                return res.status(200)
+                    .cookie("name", user.name, {maxAge: 36000000})
+                    .header("x-access-token", token)
+                    .json({
+                        success: true,
+                        message: "Đăng nhập thành công"
+                    });
             })
 
         }).catch(next);
+});
+
+router.post('/signout', (req, res, next) => {
+    res.clearCookie('token');
+    next();
 });
 
 module.exports = router;

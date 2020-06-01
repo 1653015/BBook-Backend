@@ -33,8 +33,7 @@ router.post('/email', (req, res, next) => {
     user.save().then(() => {
         res.status(200).json({
             success: true,
-            message: "Successfully registered.",
-            user: user
+            message: "Successfully registered."
         });
     }).catch(next);
 });
