@@ -3,7 +3,6 @@ const router = express.Router();
 const User = require('../../models/user');
 const {authenticate} = require('./middleware');
 
-
 router.get("/", authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
@@ -22,8 +21,5 @@ router.get("/", authenticate, (req, res, next) => {
             });
         }).catch(next);
 });
-
-
-
 
 module.exports = router;

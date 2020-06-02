@@ -17,3 +17,10 @@ const calculateTotal = (cart) => {
     cart.total = total;
     cart.save();
 }
+
+// Thêm sản phẩm vào giỏ
+router.put('/', (req, res, next) => {
+    const bookID = 
+})
+
+module.exports = router;

@@ -13,7 +13,11 @@ const book = mongoose.model(
         },
         categories: [{
             type: String
-        }]
+        }],
+        inStore: {
+            type: Number,
+            default: 0
+        }
     }),
 );
 
