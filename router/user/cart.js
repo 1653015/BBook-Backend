@@ -110,6 +110,50 @@ router.put('/', (req, res, next) => {
                 message: "Đã them sản phẩm thành công"
             })
         }).catch(next);
-})
+});
+
+// Làm trống cart
+router.put('/empty', (req, res, next) => {
+    const cartID = req.body.cartID;
+
+    Cart.findByIdAndUpdate(cartID, {
+        $set: {items: []},
+        $set: {total: 0}
+    }).then((cart) => {
+        if (!cart) {
+            return res.status(400).json({
+                success: false,
+                message: "Không tìm thấy giỏ hàng"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            cart: cart
+        });
+    }).catch(next);
+});
+
+// Loại sản phẩm khỏi giỏ hàng
+router.put('/item/remove', (req, res, next) => {
+    const cartID = req.body.cartID;
+    const itemID = req.body.itemID;
+
+    Cart.findByIdAndUpdate(cartID, {
+        $pull: {items: itemID}
+    }).then((cart) => {
+        if (!cart) {
+            return res.status(400).json({
+                success: false,
+                message: "Không tìm thấy giỏ hàng"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            cart: cart
+        });
+    }).catch(next);
+});
 
 module.exports = router;
