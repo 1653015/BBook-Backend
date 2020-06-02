@@ -11,9 +11,9 @@ const book = mongoose.model(
             type: String,
             required: true,
         },
-        genre: [{
+        categories: [{
             type: String
-        },]
+        }]
     }),
 );
 
