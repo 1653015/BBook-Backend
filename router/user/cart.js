@@ -3,6 +3,8 @@ const router = express.Router();
 const Cart = require('../../models/cart');
 const Item = require('../../models/item');
 const Book = require('../../models/book');
+const User = require('../../models/user');
+const {authenticate} = require('./middleware');
 
 // to calculate total price of a cart
 const calculateTotal = (cart) => {
@@ -18,6 +20,30 @@ const calculateTotal = (cart) => {
     cart.total = total;
     cart.save();
 }
+
+// Tạo cart
+router.post('/', authenticate, (req, res, next) => {
+    const userID = req.decoded.userID;
+
+    const cart = new Cart({
+        items: [],
+        total: 0
+    });
+
+    cart.save().then((cart) => {
+        User.findByIdAndUpdate(userID, {
+            $set: {cart: cart._id}
+        }).then((user) => {
+            user.markModified('cart');
+            user.save();
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Tạo giỏ hàng thành công"
+        })
+    })
+});
 
 // Thêm sản phẩm vào giỏ
 router.put('/', (req, res, next) => {
@@ -74,6 +100,8 @@ router.put('/', (req, res, next) => {
                     }
 
                     cart.markModified('items');
+                    cart.save();
+                    cart.markModified('total');
                     cart.save();
                 });
             
