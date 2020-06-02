@@ -3,14 +3,10 @@ const mongoose = require('mongoose');
 const cart = mongoose.model(
     'cart',
     mongoose.Schema({
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'user'
-        },
-        products: [
+        items: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'product'
+                ref: 'item'
             }
         ],
         total: Number

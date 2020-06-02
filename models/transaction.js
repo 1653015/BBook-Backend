@@ -10,7 +10,7 @@ const transaction = mongoose.model(
         products: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'product'
+                ref: 'item'
             }
         ],
         destination: {

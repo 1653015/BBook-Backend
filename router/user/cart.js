@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Cart = require('../../models/cart');
-const Product = require('../../models/product');
+const Item = require('../../models/item');
+const Book = require('../../models/book');
 
 // to calculate total price of a cart
 const calculateTotal = (cart) => {
@@ -20,7 +21,67 @@ const calculateTotal = (cart) => {
 
 // Thêm sản phẩm vào giỏ
 router.put('/', (req, res, next) => {
-    const bookID = 
+    const bookID = req.body.bookID;
+    const cartID = req.body.cartID;
+    const quant = req.body.quant;
+
+    let left = 0;
+    let price = 0;
+
+    Book.findById(bookID, 'inStore')
+        .then((book) => {
+            if (!book) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Không tìm thấy tựa sách này"
+                });
+            }
+
+            left = book.inStore - quant;
+            if (quant < 0) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Tụa sách này không cò đủ sản phẩm tồn kho"
+                });
+            }
+        });
+
+    Book.findByIdAndUpdate(bookID, {inStore: left}, {new: true})
+        .then((book) => {
+            book.markModified('inStore');
+            book.save();
+            price = book.price;
+        });
+    
+    const item = new Item({
+        quant: quant,
+        price: price,
+        refItem: bookID
+    });
+
+    item.save()
+        .then((item) => {
+            Cart.findByIdAndUpdate(cartID, {
+                    $push: {items: item._id},
+                    $set: {total: item.quant * item.price}
+                }, {new: true})
+                .then((cart) => {
+                    if (!cart) {
+                        return res.status(400).json({
+                            success: false,
+                            message: "Không tìm thấy giỏ hàng"
+                        })
+                    }
+
+                    cart.markModified('items');
+                    cart.save();
+                });
+            
+            return res.status(200).json({
+                success: true,
+                message: "Đã them sản phẩm thành công"
+            })
+        }).catch(next);
 })
 
 module.exports = router;

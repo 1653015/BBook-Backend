@@ -11,6 +11,10 @@ const book = mongoose.model(
             type: String,
             required: true,
         },
+        price: {
+            type: Number,
+            required: true,
+        },
         categories: [{
             type: String
         }],
