@@ -27,7 +27,11 @@ const user = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now(),
-    }
+    },
+    books: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'book'
+    }]
 });
 
 user.methods.comparePassword = function(input, cb) {
