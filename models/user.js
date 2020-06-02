@@ -31,7 +31,11 @@ const user = mongoose.Schema({
     books: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'book'
-    }]
+    }],
+    transactions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'transaction'
+    }] 
 });
 
 user.methods.comparePassword = function(input, cb) {
