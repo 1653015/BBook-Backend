@@ -17,6 +17,10 @@ const cart = mongoose.model(
     })
 );
 
-
+cart.methods.calculateTotal = function() {
+    for (let i = 0; i < this.products.length; i++) {
+        
+    }
+}
 
 module.exports = cart;
