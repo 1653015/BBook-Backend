@@ -57,11 +57,11 @@ router.get('/title/name', (req, res, next) => {
 // Nhập sách mới
 router.post('/', (req, res, next) => {
     const book = new Book({
-        name: this.req.name,
-        author: this.req.author,
-        price: this.req.price,
-        category: this.req.category,
-        inStore: this.req.inStore
+        name: req.body.name,
+        author: req.body.author,
+        price: req.body.price,
+        categories: req.body.categories,
+        inStore: req.body.inStore
     });
 
     book.save().then((book) => {
@@ -91,11 +91,8 @@ router.put('/quant', (req, res, next) => {
         });
     }
 
-    Book.findByIdAndUpdate(bookID, {$set: {inStore: this.inStore + quant}}, {new: true})
+    Book.findByIdAndUpdate(bookID, {$inc: {inStore: quant}}, {new: true})
         .then((book) => {
-            book.markModified('inStore');
-            book.save();
-
             if (!book) {
                 return res.status(400).json({
                     success: false,
@@ -106,6 +103,19 @@ router.put('/quant', (req, res, next) => {
             return res.status(200).json({
                 success: true,
                 book: book
+            });
+        }).catch(next);
+});
+
+// Tìm tất cả các sách thuộc thể loại
+router.get('/category/:cat', (req, res, next) => {
+    const category = req.params.cat;
+
+    Book.find({categories: {$all: category}})
+        .then((books) => {
+            return res.status(200).json({
+                success: true,
+                books: books
             });
         }).catch(next);
 });
