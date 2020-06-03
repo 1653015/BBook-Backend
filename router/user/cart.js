@@ -96,11 +96,6 @@ router.put('/', (req, res, next) => {
                             message: "Không tìm thấy giỏ hàng"
                         })
                     }
-
-                    cart.markModified('items');
-                    cart.save();
-                    cart.markModified('total');
-                    cart.save();
                 });
             
             return res.status(200).json({
