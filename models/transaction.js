@@ -7,7 +7,7 @@ const transaction = mongoose.model(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
         },
-        products: [
+        items: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'item'

@@ -150,4 +150,45 @@ router.put('/item/remove', (req, res, next) => {
     }).catch(next);
 });
 
+// kiểm tra item của cart
+router.post('/validate', authenticate, (req, res, next) => {
+    const cart = req.cookies['cart'];
+    const validatedCart = [];
+
+    cart.forEach(item => {
+        Book.findById(item.id)
+            .then((book) => {
+                if (book.inStore >= item.quant) {
+                    validatedCart.push({
+                        id: item.id,
+                        quant: item.quant,
+                        price: book.price * item.quant
+                    });
+
+                    book.inStore -= item.quant;
+                    book.markModified('inStore');
+                    book.save();
+                }
+            })
+    });
+
+    return res.status(200).json({
+        success: true,
+        cart: validatedCart
+    });
+});
+
+// return cart items
+router.post('/return', (req, res, next) => {
+    const cart = req.body.cart;
+
+    cart.forEach(item => {
+        Book.findByIdAndUpdate(item.id, {$inc: {inStore: item.quant}});
+    });
+
+    return res.status(200).json({
+        success: true
+    });
+})
+
 module.exports = router;
