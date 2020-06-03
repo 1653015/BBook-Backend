@@ -7,7 +7,7 @@ const User = require('../../models/user');
 const {authenticate} = require('./middleware');
 
 // to calculate total price of a cart
-const calculateTotal = (cart) => {
+calculateTotal = (cart) => {
     let total = 0;
 
     for (let i = 0; i < cart.products.length; i++) {
@@ -72,10 +72,8 @@ router.put('/', (req, res, next) => {
             }
         });
 
-    Book.findByIdAndUpdate(bookID, {inStore: left}, {new: true})
+    Book.findByIdAndUpdate(bookID, {$inc: {inStore: -quant}}, {new: true})
         .then((book) => {
-            book.markModified('inStore');
-            book.save();
             price = book.price;
         });
     
