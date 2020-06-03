@@ -27,7 +27,19 @@ const user = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now(),
-    }
+    },
+    cart: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'cart'
+    },
+    books: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'book'
+    }],
+    transactions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'transaction'
+    }] 
 });
 
 user.methods.comparePassword = function(input, cb) {
