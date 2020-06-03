@@ -110,8 +110,7 @@ router.put('/empty', (req, res, next) => {
     const cartID = req.body.cartID;
 
     Cart.findByIdAndUpdate(cartID, {
-        $set: {items: []},
-        $set: {total: 0}
+        $set: {items: [], total: 0},
     }).then((cart) => {
         if (!cart) {
             return res.status(400).json({
@@ -131,6 +130,8 @@ router.put('/empty', (req, res, next) => {
 router.put('/item/remove', (req, res, next) => {
     const cartID = req.body.cartID;
     const itemID = req.body.itemID;
+
+    Item.findByIdAndDelete(itemID);
 
     Cart.findByIdAndUpdate(cartID, {
         $pull: {items: itemID}
