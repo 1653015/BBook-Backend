@@ -21,6 +21,10 @@ const transaction = mongoose.model(
         total: {
             type: Number,
             default: 0
+        },
+        completed: {
+            type: Boolean,
+            default: false
         }
     })
 );

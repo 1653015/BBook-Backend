@@ -30,6 +30,24 @@ router.post('/', authenticate, (req, res, next) => {
             })
         })
     }).catch(next);
+});
+
+// Complete transaction :: Admin api
+router.put('/complete', (req, res, next) => {
+    const transID = req.body.transID;
+
+    Transaction.findByIdAndUpdate(transID, {
+        $set: {completed: true}
+    }).then(transaction => {
+        User.findByIdAndUpdate(transaction.user, {
+            $addToSet: { books: { $each: transaction.items } }
+        }).then(user => {
+            return res.status(200).json({
+                success: true,
+                user: user
+            })
+        })
+    }).catch(next);
 })
 
 module.exports = router;
