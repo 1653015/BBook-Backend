@@ -28,10 +28,6 @@ const user = mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
-    cart: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'cart'
-    },
     books: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'book'

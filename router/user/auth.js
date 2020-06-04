@@ -6,7 +6,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-router.post('/signin', (req, res, next) => {
+router.post('/email', (req, res, next) => {
     // validate user input
     const { error } = signinValidation(req.body);
     if (error) return res.status(400).json({

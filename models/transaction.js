@@ -7,7 +7,7 @@ const transaction = mongoose.model(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
         },
-        products: [
+        items: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'item'
@@ -21,6 +21,10 @@ const transaction = mongoose.model(
         total: {
             type: Number,
             default: 0
+        },
+        completed: {
+            type: Boolean,
+            default: false
         }
     })
 );
