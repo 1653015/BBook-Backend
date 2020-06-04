@@ -1,23 +1,24 @@
-const mongoose = require('mongoose');
-const router = mongoose.Router();
+const express = require('express');
+const router = express.Router();
 const cookieParser = require('cookie-parser');
 router.use(cookieParser());
 const { authenticate } = require('./middleware');
 
 const Transaction = require('../../models/transaction');
-const Item = require('../../models/item');
 const User = require('../../models/user');
 const Book = require('../../models/book');
 
 // tạo phiên giao dịch
 router.post('/', authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
-    const cart = req.body.cart.map(item => item.id);
+    const cart = req.body.items.map(item => item.id);
 
     const transaction = new Transaction({
         user: userID,
         items: cart,
-        total: req.body.total
+        total: req.body.total,
+        destination: "wefwef",
+        contactNumbers: ""
     });
 
     transaction.save().then((transaction) => {
@@ -41,7 +42,7 @@ router.put('/complete', (req, res, next) => {
     }).then(transaction => {
         User.findByIdAndUpdate(transaction.user, {
             $addToSet: { books: { $each: transaction.items } }
-        }).then(user => {
+        }, { new: true }).then(user => {
             return res.status(200).json({
                 success: true,
                 user: user
