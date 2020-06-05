@@ -22,4 +22,20 @@ router.get("/", authenticate, (req, res, next) => {
         }).catch(next);
 });
 
+router.get('/books', authenticate, (req, res, next) => {
+    const userID = req.decoded.userID;
+
+    User.findById(userID, 'books')
+        .then((user) => {
+            return res.status(200).json({
+                success: true,
+                user: user
+            });
+        }).catch(next);
+});
+
+router.get('/password/renew', (req, res, next) => {
+    
+})
+
 module.exports = router;

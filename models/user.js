@@ -5,8 +5,22 @@ const bcrypt = require('bcrypt'),
 const user = mongoose.Schema({
     email: {
         type: String,
-        required: true,
-        unique: true
+		trim: true,
+		index: true,
+		unique: true,
+		sparse: true,
+    },
+    provider: {
+        type: String,
+		default: 'BBookUser',
+		required: true,
+    },
+    providerUID: {
+        type: String,
+		trim: true,
+		index: true,
+		unique: true,
+		sparse: true,
     },
     password: {
         type: String,
@@ -35,7 +49,9 @@ const user = mongoose.Schema({
     transactions: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'transaction'
-    }] 
+    }],
+    resetPasswordToken: String,
+    resetPasswordTokenExpiration: Date
 });
 
 user.methods.comparePassword = function(input, cb) {
