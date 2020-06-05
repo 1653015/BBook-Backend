@@ -97,7 +97,7 @@ router.post('/forgot', (req, res, next) => {
                 subject: 'Node.js Password Reset',
                 text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                     'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                    'http://' + req.headers.host + '/auth/reset' + token + '\n\n' +
+                    'http://' + req.headers.host + '/auth/reset/' + token + '\n\n' +
                     'If you did not request this, please ignore this email and your password will remain unchanged.\n'
             };
             smtpTransport.sendMail(mailOptions, function(err) {
@@ -113,6 +113,38 @@ router.post('/forgot', (req, res, next) => {
         res.redirect('/forgot');
     });
 });
+
+router.get('/reset/:token', (req, res, next) => {
+    User.findOne({ resetPasswordToken: req.params.token })
+        .then((user) => {
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Không tìm thấy user này"
+                })
+            }
+            
+            user.password = req.body.password;
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpires = undefined;
+
+            user.save((err) => {
+                if (!err) {
+                    return res.status(200).json({
+                        success: true,
+                        message: "Khôi phục password thành công"
+                    });
+                } else {
+                    return res.status(400).json({
+                        success: false,
+                        err: err
+                    });
+                }
+            });
+        }).catch(next);
+});
+
+
 
 router.post('/signout', (req, res, next) => {
     res.clearCookie('token');
