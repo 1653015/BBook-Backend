@@ -49,7 +49,9 @@ const user = mongoose.Schema({
     transactions: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'transaction'
-    }] 
+    }],
+    resetPasswordToken: String,
+    resetPasswordTokenExpiration: Date
 });
 
 user.methods.comparePassword = function(input, cb) {
