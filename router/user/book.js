@@ -20,7 +20,7 @@ router.get('/title/id', (req, res, next) => {
 
     Book.findById(bookID)
         .populate({
-            path: 'category',
+            path: 'categories',
             select: 'name'
         })
         .then((book) => {
@@ -44,7 +44,7 @@ router.get('/title/name', (req, res, next) => {
 
     Book.find({name: name})
         .populate({
-            path: 'category',
+            path: 'categories',
             select: 'name'
         })
         .then((book) => {
@@ -121,7 +121,7 @@ router.get('/category/:cat', (req, res, next) => {
 
     Book.find({categories: {$all: category}})
         .populate({
-            path: 'category',
+            path: 'categories',
             select: 'name'
         })
         .then((books) => {
@@ -165,7 +165,7 @@ router.put('/category/add', (req, res, next) => {
 
     Book.findByIdAndUpdate(bookID,{
         $push: {categories: catID}
-    }).then((book) => {
+    }, {new: true}).then((book) => {
         if (!book) {
             return res.status(404).json({
                 success: false,
