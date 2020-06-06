@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const trade = new mongoose.model(
+const trade = mongoose.model(
     'trade',
     mongoose.Schema({
         op: {

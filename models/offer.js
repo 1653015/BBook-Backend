@@ -15,7 +15,7 @@ const offer = mongoose.model(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'book'
         },
-        offering: [{
+        offerings: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'book'
         }],
