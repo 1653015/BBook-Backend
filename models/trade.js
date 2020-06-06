@@ -7,10 +7,13 @@ const trade = new mongoose.model(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
         },
-        interested: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'book'
-        }],
+        interested: {
+            type: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'book'
+            }],
+            default: []
+        },
         message: {
             type: String,
             required: true,

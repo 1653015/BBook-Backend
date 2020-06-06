@@ -50,7 +50,7 @@ const user = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'transaction'
     }],
-    tradeRequest: [{
+    tradeRequests: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'trade'
     }],
