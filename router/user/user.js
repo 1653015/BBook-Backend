@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../../models/user');
+
 const {authenticate} = require('./middleware');
+
+const User = require('../../models/user');
+const Offer = require('../../models/offer');
+const Trade = require('../../models/trade');
 
 router.get("/", authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
@@ -34,8 +38,28 @@ router.get('/books', authenticate, (req, res, next) => {
         }).catch(next);
 });
 
-router.get('/password/renew', (req, res, next) => {
+router.get('/offered', authenticate, (req, res, next) => {
+    const userID = req.decoded.userID;
+
+    Offer.find({to: userID})
+        .then((offers) => {
+            return res.status(200).json({
+                success: true,
+                offers: offers
+            });
+        }).catch(next);
+});
+
+router.get('/trade', authenticate, (req, res, next) => {
+    const userID = req.decoded.user;
     
-})
+    Trade.find({op: userID})
+        .then((trades) => {
+            return res.status(200).json({
+                success: true,
+                trades: trades
+            });
+        }).catch(next);
+});
 
 module.exports = router;

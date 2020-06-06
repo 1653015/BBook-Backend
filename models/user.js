@@ -50,6 +50,10 @@ const user = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'transaction'
     }],
+    tradeRequest: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'trade'
+    }],
     resetPasswordToken: String,
     resetPasswordTokenExpiration: Date
 });
