@@ -85,6 +85,7 @@ router.delete('/:id', authenticate, (req, res, next) => {
         }).catch(next);
 });
 
+// Dùng để accept offer
 
 
 module.exports = router;

@@ -46,6 +46,10 @@ const user = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'book'
     }],
+    tradedBooks: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'book'
+    }],
     transactions: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'transaction'

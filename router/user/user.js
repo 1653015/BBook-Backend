@@ -26,18 +26,34 @@ router.get("/", authenticate, (req, res, next) => {
         }).catch(next);
 });
 
-router.get('/books', authenticate, (req, res, next) => {
+// Lấy tất cả sách trong kho của 1 user
+router.get('/books/stash', authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
     User.findById(userID, 'books')
-        .then((user) => {
+        .populate('books')
+        .then((books) => {
             return res.status(200).json({
                 success: true,
-                user: user
+                books: books
             });
         }).catch(next);
 });
 
+// Lấy tất cả các sách user đang cho mượn
+router.get('/books/traded', authenticate, (req, res, next) => {
+    const userID = req.decoded.userID;
+
+    User.findById(userID, 'tradedBooks')
+        .then((books) => {
+            return res.status(200).json({
+                success: true,
+                books: books
+            });
+        }).catch(next);
+});
+
+// Lấy tất cả các offer đến user này
 router.get('/offered', authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
@@ -50,6 +66,7 @@ router.get('/offered', authenticate, (req, res, next) => {
         }).catch(next);
 });
 
+// Lấy tất cả các trade post của user
 router.get('/trade', authenticate, (req, res, next) => {
     const userID = req.decoded.user;
     
@@ -60,6 +77,52 @@ router.get('/trade', authenticate, (req, res, next) => {
                 trades: trades
             });
         }).catch(next);
+});
+
+// chuyển sách từ kho sang cho mượn
+router.put('/books/traded/:id', authenticate, (req, res, next) => {
+    const bookID = req.params.id;
+    const userID = req.decoded.userID;
+
+    User.findByIdAndUpdate(userID, {
+        $push: {tradedBooks: bookID},
+        $pull: {books: bookID}
+    }).then((user) => {
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "Không tìm thấy người dùng"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            user: user
+        });
+    }).catch(next);
+});
+
+// Chuyển sách từ trạng thái cho mượn về kho
+router.put('/books/stash/:id', authenticate, (req, res, next) => {
+    const bookID = req.params.id;
+    const userID = req.decoded.userID;
+
+    User.findByIdAndUpdate(userID, {
+        $pull: {tradedBooks: bookID},
+        $push: {books: bookID}
+    }).then((user) => {
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "Không tìm thấy người dùng"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            user: user
+        });
+    }).catch(next);
 });
 
 module.exports = router;
