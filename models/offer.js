@@ -15,10 +15,10 @@ const offer = mongoose.model(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'book'
         },
-        offerings: [{
+        offering: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'book'
-        }],
+        },
         post: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'trade'

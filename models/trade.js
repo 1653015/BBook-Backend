@@ -3,27 +3,32 @@ const mongoose = require('mongoose');
 const trade = mongoose.model(
     'trade',
     mongoose.Schema({
-        op: {
+        userA : {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
         },
-        interested: {
-            type: [{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'book'
-            }],
-            default: []
-        },
-        message: {
-            type: String,
-            required: true,
-            default: 'lemme smash!!!'
-        },
-        offers: {
+        bookA: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'offer'
+            ref: 'book'
         },
-    })
-)
+        userB : {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'
+        },
+        bookB: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'book'
+        },
+        deadLine: Date.now() + '7d',
+        onGoing: {
+            type: Boolean,
+            default: false
+        },
+        duration: {
+            type: Date,
+            default: 0
+        }
+    }),
+);
 
 module.exports = trade;

@@ -2,10 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 const {authenticate} = require('./middleware');
+const async = require('async');
 
 const User = require('../../models/user');
 const Offer = require('../../models/offer');
+const Traderq = require('../../models/trade-request');
 const Trade = require('../../models/trade');
+
 
 // new offer
 router.post('/', authenticate, (req, res, next) => {
@@ -20,7 +23,7 @@ router.post('/', authenticate, (req, res, next) => {
     });
 
     offer.save().then((offer) => {
-        Trade.findByIdAndUpdate(offer.post, {
+        Traderq.findByIdAndUpdate(offer.post, {
             $push: {offers: offer._id}
         }).then(() => {
             return res.status(200).json({
@@ -73,7 +76,7 @@ router.get('/books/:id', authenticate, (req, res, next) => {
 });
 
 // Dùng để từ chối 
-router.delete('/:id', authenticate, (req, res, next) => {
+router.delete('/decline/:id', authenticate, (req, res, next) => {
     const offerID = req.params.id;
 
     Offer.findByIdAndDelete(offerID)
@@ -85,7 +88,59 @@ router.delete('/:id', authenticate, (req, res, next) => {
         }).catch(next);
 });
 
-// Dùng để accept offer
+// Dùng để accept offer - tạo 1 trade session
+router.delete('/accept/:id', authenticate, (req, res, next) => {
+    const offerID = req.params.id;
+    const userID = req.decoded.userID;
 
+    async.waterfall([
+        (done) => {
+            Offer.findById(offerID)
+                .then(offer => {
+                    if (!offer) {
+                        res.status(404).json({
+                            success: false,
+                            message: "Không tìm thấy offer"
+                        });
+                    }
+
+                    done(err, offer);
+                })
+        },
+        (done, offer) => {
+            User.findByIdAndUpdate(offer.from, {
+                    $pull: {books: offer.offering},
+                    $push: {tradedBooks: offer.offering}
+                });
+            
+            User.findByIdAndUpdate(userID, {
+                    $pull: {books: offer.for},
+                    $push: {tradedBooks: offer.for}
+                })
+            
+            done(err, offer);
+        },
+        (done, offer) => {
+            const trade = new Trade({
+                userA: userID,
+                bookA: offer.for,
+                userB: offer.from,
+                bookB: offer.offering,
+            });
+
+            trade.save().then((trade) => {
+                done(done, trade);
+            })
+        },
+        (done, trade) => {
+            Offer.deleteMany({from: trade.userA, offering: trade.bookA});
+            Offer.deleteMany({from: trade.userB, offering: trade.bookB});
+
+            done(err, 'done');
+        }
+    ], (err) => {
+        if (err) return next(err);
+    });
+});
 
 module.exports = router;

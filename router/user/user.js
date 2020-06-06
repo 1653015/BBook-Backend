@@ -5,7 +5,7 @@ const {authenticate} = require('./middleware');
 
 const User = require('../../models/user');
 const Offer = require('../../models/offer');
-const Trade = require('../../models/trade');
+const Traderq = require('../../models/trade-request');
 
 router.get("/", authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
@@ -67,10 +67,10 @@ router.get('/offered', authenticate, (req, res, next) => {
 });
 
 // Lấy tất cả các trade post của user
-router.get('/trade', authenticate, (req, res, next) => {
+router.get('/traderq', authenticate, (req, res, next) => {
     const userID = req.decoded.user;
     
-    Trade.find({op: userID})
+    Traderq.find({op: userID})
         .then((trades) => {
             return res.status(200).json({
                 success: true,
