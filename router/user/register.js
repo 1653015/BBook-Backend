@@ -20,7 +20,7 @@ router.post('/email', (req, res, next) => {
                 const user = new User({
                     email: req.body.email,
                     password: req.body.password,
-                    name: req.body.name,
+                    name: req.body.name,    
                     address: req.body.address,
                     phone: req.body.phone,
                     books: [],

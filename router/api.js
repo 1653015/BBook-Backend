@@ -8,5 +8,6 @@ router.use('/register', require('./user/register'));
 router.use('/book', require('./user/book'));
 router.use('/cart', require('./user/cart'));
 router.use('/transaction', require('./user/transaction'));
+router.use('/category', require('./user/category'));
 
 module.exports = router;

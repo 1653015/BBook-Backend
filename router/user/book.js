@@ -19,6 +19,10 @@ router.get('/title/id', (req, res, next) => {
     const bookID = req.body.bookID;
 
     Book.findById(bookID)
+        .populate({
+            path: 'category',
+            select: 'name'
+        })
         .then((book) => {
             if (!book) {
                 return res.status(400).json({
@@ -39,6 +43,10 @@ router.get('/title/name', (req, res, next) => {
     const name = req.body.name;
 
     Book.find({name: name})
+        .populate({
+            path: 'category',
+            select: 'name'
+        })
         .then((book) => {
             if (!book) {
                 return res.status(400).json({
@@ -112,6 +120,10 @@ router.get('/category/:cat', (req, res, next) => {
     const category = req.params.cat;
 
     Book.find({categories: {$all: category}})
+        .populate({
+            path: 'category',
+            select: 'name'
+        })
         .then((books) => {
             return res.status(200).json({
                 success: true,

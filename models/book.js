@@ -16,7 +16,8 @@ const book = mongoose.model(
             required: true,
         },
         categories: [{
-            type: String
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'category'
         }],
         inStore: {
             type: Number,
