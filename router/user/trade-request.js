@@ -5,7 +5,7 @@ const {authenticate} = require('./middleware');
 
 const User = require('../../models/user');
 const Offer = require('../../models/offer');
-const Traderq = require('../../models/traderq-request');
+const Traderq = require('../../models/trade-request');
 
 // Tạo post trao đổi
 router.post('/', authenticate, (req, res, next) => {

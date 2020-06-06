@@ -24,7 +24,9 @@ router.post('/email', (req, res, next) => {
                     address: req.body.address,
                     phone: req.body.phone,
                     books: [],
+                    tradedBooks: [],
                     transactions: [],
+                    tradeRequests: []
                 });
 
                 user.save().then(() => {

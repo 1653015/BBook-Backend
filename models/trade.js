@@ -19,7 +19,10 @@ const trade = mongoose.model(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'book'
         },
-        deadLine: Date.now() + '7d',
+        deadLine: {
+            type: Date,
+            default: '7d'
+        },
         onGoing: {
             type: Boolean,
             default: false

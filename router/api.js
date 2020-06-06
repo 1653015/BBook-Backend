@@ -9,6 +9,7 @@ router.use('/book', require('./user/book'));
 router.use('/cart', require('./user/cart'));
 router.use('/transaction', require('./user/transaction'));
 router.use('/category', require('./user/category'));
-router.use('/trade', require('./user/trade-request'));
+router.use('/traderq', require('./user/trade-request'));
+router.use('/trade', require('./user/trade'));
 
 module.exports = router;

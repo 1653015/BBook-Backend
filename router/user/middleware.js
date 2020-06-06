@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
+const User = require('../../models/user');
+
 authenticate = (req, res, next) => {
     let token = req.headers['x-access-token'];
 
@@ -27,6 +29,42 @@ authenticate = (req, res, next) => {
 	});
 }
 
+pushBackToStash = (req, res, next) => {
+	const pairA = req.body.pairA;
+	const pairB = req.body.pairB;
+
+	User.findByIdAndUpdate(pairA.id, {
+		$push: {books: pairA.book},
+		$pull: {tradedBooks: pairA.book}
+	});
+
+	User.findByIdAndUpdate(pairB.id, {
+		$push: {books: pairB.book},
+		$pull: {tradedBooks: pairB.book}
+	});
+
+	next();
+}
+
+takeFromStash = (req, res, next) => {
+	const pairA = req.body.pairA;
+	const pairB = req.body.pairB;
+
+	User.findByIdAndUpdate(pairA.id, {
+		$pull: {books: pairA.book},
+		$push: {tradedBooks: pairA.book}
+	});
+
+	User.findByIdAndUpdate(pairB.id, {
+		$pull: {books: pairB.book},
+		$push: {tradedBooks: pairB.book}
+	});
+
+	next();
+}
+
 module.exports = {
-    authenticate
+	authenticate,
+	pushBackToStash,
+	takeFromStash
 }
