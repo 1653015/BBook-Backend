@@ -158,4 +158,26 @@ stockCheck = (req, res, next) => {
     next();
 }
 
+// Thêm category cho sách
+router.put('/category/add', (req, res, next) => {
+    const bookID = req.body.bookID;
+    const catID = req.body.catID;
+
+    Book.findByIdAndUpdate(bookID,{
+        $push: {categories: catID}
+    }).then((book) => {
+        if (!book) {
+            return res.status(404).json({
+                success: false,
+                message: "Không tìm thấy sách"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            book: book
+        });
+    }).catch(next);
+});
+
 module.exports = router;
