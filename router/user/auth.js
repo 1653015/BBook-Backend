@@ -43,13 +43,11 @@ router.post('/email', (req, res, next) => {
                     { expiresIn: '24h' }
                 );
 
-                return res.status(200)
-                    .cookie("mUser", user.name, {maxAge: 36000000, httpOnly: false})
-                    .header("x-access-token", token)
-                    .json({
+                return res.status(200).json({
                         success: true,
                         user: removeSensitiveData(user),
-                        message: "Đăng nhập thành công"
+                        message: "Đăng nhập thành công",
+                        token: token
                     });
             });
         }).catch(next);
@@ -73,12 +71,11 @@ router.post('/auth-provider', (req, res, next) => {
                         { expiresIn: '24h' }
                     );
     
-                    return res.status(200)
-                        .cookie("mUser", user.name, {maxAge: 36000000, httpOnly: false})
-                        .header("x-access-token", token)
-                        .json({
+                    return res.status(200).json({
                             success: true,
-                            message: "Đăng nhập thành công"
+                            user: removeSensitiveData(user),
+                            message: "Đăng nhập thành công",
+                            token: token
                         });
                 });
             }
@@ -88,13 +85,11 @@ router.post('/auth-provider', (req, res, next) => {
                 { expiresIn: '24h' }
             );
 
-            return res.status(200)
-                .cookie("mUser", user.name, {maxAge: 36000000, httpOnly: false})
-                .header("x-access-token", token)
-                .json({
+            return res.status(200).json({
                     success: true,
                     user: removeSensitiveData(user),
-                    message: "Đăng nhập thành công"
+                    message: "Đăng nhập thành công",
+                    token: token,
                 });
         }).catch(next);
 })
