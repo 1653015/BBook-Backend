@@ -48,12 +48,57 @@ router.post('/email', (req, res, next) => {
                     .header("x-access-token", token)
                     .json({
                         success: true,
+                        user: removeSensitiveData(user),
                         message: "Đăng nhập thành công"
                     });
             })
 
         }).catch(next);
 });
+
+router.post('/auth-provider', (req, res, next) => {
+    const provider = req.body.provider;
+    const uid = req.body.uid;
+
+    User.find({provider: provider, providerUID: uid})
+        .then((user) => {
+            if (!user) {
+                const user = new User({
+                    providerUID: uid,
+                    provider: provider
+                });
+
+                user.save().then(user => {
+                    let token = jwt.sign({ userID: user._id },
+                        process.env.TOKEN_SECRET,
+                        { expiresIn: '24h' }
+                    );
+    
+                    return res.status(200)
+                        .cookie("mUser", user.name, {maxAge: 36000000, httpOnly: false})
+                        .header("x-access-token", token)
+                        .json({
+                            success: true,
+                            message: "Đăng nhập thành công"
+                        });
+                });
+            }
+
+            let token = jwt.sign({ userID: user._id },
+                process.env.TOKEN_SECRET,
+                { expiresIn: '24h' }
+            );
+
+            return res.status(200)
+                .cookie("mUser", user.name, {maxAge: 36000000, httpOnly: false})
+                .header("x-access-token", token)
+                .json({
+                    success: true,
+                    user: removeSensitiveData(user),
+                    message: "Đăng nhập thành công"
+                });
+        }).catch(next);
+})
 
 router.post('/forgot', (req, res, next) => {
     async.waterfall([
@@ -143,11 +188,16 @@ router.get('/reset/:token', (req, res, next) => {
         }).catch(next);
 });
 
-
-
 router.post('/signout', (req, res, next) => {
     res.clearCookie('token');
     next();
 });
+
+const removeSensitiveData = (user) => {
+	let userObj = user.toObject();
+	delete userObj.password;
+	delete userObj.providerUID;
+	return userObj;
+};
 
 module.exports = router;

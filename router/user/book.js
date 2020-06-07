@@ -15,8 +15,8 @@ router.get('/', (req, res, next) => {
 });
 
 // Lấy info tựa sách bằng ID    
-router.get('/title/id', (req, res, next) => {
-    const bookID = req.body.bookID;
+router.get('/title/:id', (req, res, next) => {
+    const bookID = req.params.bookID;
 
     Book.findById(bookID)
         .populate({
@@ -39,8 +39,8 @@ router.get('/title/id', (req, res, next) => {
 });
 
 // Lây tựa sách theo tên
-router.get('/title/name', (req, res, next) => {
-    const name = req.body.name;
+router.get('/title/:name', (req, res, next) => {
+    const name = req.params.name;
 
     Book.find({name: name})
         .populate({

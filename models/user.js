@@ -22,13 +22,11 @@ const user = mongoose.Schema({
 		unique: true,
 		sparse: true,
     },
-    password: {
-        type: String,
-        required: true,
-    },
+    password: String,
     name: {
         type: String,
         required: true,
+        default: "Jill Doe"
     },
     address: {
         type: String,
