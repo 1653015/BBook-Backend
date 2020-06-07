@@ -15,10 +15,11 @@ app.use('/', router);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use('/uploads', express.static('uploads'));
 
 // Create connection to the database
 mongoose.connect(
-    process.env.DB_CONNECTION_STRING,
+    process.env.TEST_CONNECTION_STRING,
     { useNewUrlParser: true,
         useUnifiedTopology: true },
     () => { console.log('DB ready'); }

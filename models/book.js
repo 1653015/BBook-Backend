@@ -7,6 +7,7 @@ const book = mongoose.model(
             type: String,
             required: true
         },
+        image: String,
         author: {
             type: String,
             required: true,

@@ -2,7 +2,26 @@ const express = require('express');
 const router = express.Router();
 
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const  filter = (req, file, cb) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+} 
+const storage = multer.diskStorage({
+    filename: function (req, file, cb) {
+        cb(null, new Date().toDateString() + file.originalname);
+    },
+    destination: function (req, file, cb) {
+        cb(null, './uploads/')
+    }
+})
+const upload = multer({ 
+    storage: storage,
+    limits: {fileSize: 1024 * 1024 * 8},
+    fileFilter: filter
+});
 
 const Book = require('../../models/book');
 
@@ -66,9 +85,11 @@ router.get('/title/:name', (req, res, next) => {
 });
 
 // Nhập sách mới
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('bookImage'), (req, res, next) => {
+    console.log(req.file);
     const book = new Book({
         name: req.body.name,
+        image: req.file.path,
         author: req.body.author,
         price: req.body.price,
         categories: req.body.categories,
