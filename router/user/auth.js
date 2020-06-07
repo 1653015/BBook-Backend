@@ -51,8 +51,7 @@ router.post('/email', (req, res, next) => {
                         user: removeSensitiveData(user),
                         message: "Đăng nhập thành công"
                     });
-            })
-
+            });
         }).catch(next);
 });
 

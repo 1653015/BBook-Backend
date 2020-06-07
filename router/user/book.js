@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
 const Book = require('../../models/book');
 
 // Lấy info tất cả các tựa sách
@@ -16,7 +19,7 @@ router.get('/', (req, res, next) => {
 
 // Lấy info tựa sách bằng ID    
 router.get('/title/:id', (req, res, next) => {
-    const bookID = req.params.bookID;
+    const bookID = req.params.id;
 
     Book.findById(bookID)
         .populate({
