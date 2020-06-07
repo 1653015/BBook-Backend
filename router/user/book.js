@@ -10,7 +10,7 @@ const  filter = (req, file, cb) => {
     }
 } 
 const storage = multer.diskStorage({
-    filename: function (req, file, cb) {
+    filename: function (req, file, cb) {    
         cb(null, new Date().toDateString() + file.originalname);
     },
     destination: function (req, file, cb) {
@@ -185,10 +185,10 @@ stockCheck = (req, res, next) => {
 // Thêm category cho sách
 router.put('/category/add', (req, res, next) => {
     const bookID = req.body.bookID;
-    const catID = req.body.catID;
+    const cats = req.body.cats;
 
     Book.findByIdAndUpdate(bookID,{
-        $push: {categories: catID}
+        $push: {categories: { $each: cats }}
     }, {new: true}).then((book) => {
         if (!book) {
             return res.status(404).json({
