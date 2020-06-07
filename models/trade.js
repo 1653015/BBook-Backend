@@ -21,7 +21,6 @@ const trade = mongoose.model(
         },
         deadLine: {
             type: Date,
-            default: '7d'
         },
         onGoing: {
             type: Boolean,

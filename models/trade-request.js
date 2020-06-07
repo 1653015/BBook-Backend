@@ -7,6 +7,10 @@ const traderq = mongoose.model(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
         },
+        book: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'book'
+        },
         interested: {
             type: [{
                 type: mongoose.Schema.Types.ObjectId,
@@ -20,9 +24,12 @@ const traderq = mongoose.model(
             default: 'lemme smash!!!'
         },
         offers: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'offer'
-        },
+            type: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'offer'
+            }],
+            default: []
+        }
     })
 )
 

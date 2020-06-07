@@ -13,9 +13,9 @@ router.post('/', authenticate, (req, res, next) => {
 
     const traderq = new Traderq({
         op: userID,
+        book: req.body.book,
         interested: req.body.interested,
-        message: req.body.message,
-        offers: []
+        message: req.body.message
     });
 
     traderq.save().then((traderq) => {
@@ -32,11 +32,11 @@ router.post('/', authenticate, (req, res, next) => {
 
 // Lấy info 1 traderq request bằng ID
 router.get('/:id', authenticate, (req, res, next) => {
-    const tradeID = req.params.tradeID;
+    const tradeID = req.params.id;
 
-    Traderq.findByID(tradeID)
+    Traderq.findById(tradeID)
         .populate({
-            path: 'interested op offers'
+            path: 'interested offers book'
         })
         .then((traderq) => {
             if(!traderq) {
@@ -78,8 +78,12 @@ router.get('/offer/:id', authenticate, (req, res, next) => {
 router.delete('/:id', authenticate, (req, res, next) => {
     const tradeID = req.params.id;
     
-    Traderq.findByIdAndDelete(tradeID)
-        .then(() => {
+    Traderq.findById(tradeID)
+        .then((traderq) => {
+            traderq.offers.forEach(offer => {
+                Offer.findByIdAndDelete(offer);
+            });
+
             return res.status(200).json({
                 success: true,
                 message: "Xóa thành công"
