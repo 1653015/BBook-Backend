@@ -89,7 +89,7 @@ router.post('/', upload.single('bookImage'), (req, res, next) => {
     console.log(req.file);
     const book = new Book({
         name: req.body.name,
-        image: req.file.path,
+        image: req.body.bookImage,
         author: req.body.author,
         price: req.body.price,
         categories: req.body.categories,
