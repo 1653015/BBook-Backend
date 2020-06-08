@@ -17,8 +17,8 @@ router.post('/', authenticate, (req, res, next) => {
         user: userID,
         items: cart,
         total: req.body.total,
-        destination: "wefwef",
-        contactNumbers: ""
+        destination: req.body.destination,
+        contactNumbers: req.body.numbers
     });
 
     transaction.save().then((transaction) => {
@@ -49,6 +49,8 @@ router.put('/complete', (req, res, next) => {
             })
         })
     }).catch(next);
-})
+});
+
+
 
 module.exports = router;
