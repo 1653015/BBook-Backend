@@ -20,9 +20,8 @@ router.post('/validate', authenticate, (req, res, next) => {
                 .then((book) => {
                     if (book.inStore >= item.quant) {
                         validatedCart.items.push({
-                            id: item.id,
-                            quant: item.quant,
-                            price: book.price * item.quant
+                            book: removeUnwantedFields(book),
+                            quant: item.quant
                         });
 
                         validatedCart.total += item.quant * book.price;
@@ -63,6 +62,13 @@ router.put('/return', authenticate,(req, res, next) => {
                 message: "Hoàn trả thành công"
             })
         }).catch(next);
-})
+});
+
+const removeUnwantedFields = (book) => {
+	let bookObj = book.toObject();
+	delete bookObj.categories;
+	delete bookObj.inStore;
+	return bookObj;
+};
 
 module.exports = router;
