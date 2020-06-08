@@ -6,7 +6,7 @@ const cart = mongoose.model(
         items: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'item'
+                ref: 'book'
             }
         ],
         total: Number

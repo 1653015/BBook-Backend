@@ -51,6 +51,22 @@ router.put('/complete', (req, res, next) => {
     }).catch(next);
 });
 
+router.post('/complete/:id', authenticate, (req, res, next) => {
+    const transID = req.params.id;
+    const userID = req.params.userID;
 
+    Transaction.findOneAndUpdate({_id: transID, user: userID, completed: false}, {
+        $set: {completed: true}
+    }).then(transaction => {
+        User.findByIdAndUpdate(userID, {
+            $addToSet: { books: { $each: transaction.items } }
+        }, { new: true }).then(user => {
+            return res.status(200).json({
+                success: true,
+                user: user
+            })
+        })
+    }).catch(next);
+});
 
 module.exports = router;

@@ -66,6 +66,20 @@ router.get('/offered', authenticate, (req, res, next) => {
         }).catch(next);
 });
 
+router.put('/book/stash/add', authenticate, (req, res, next) => {
+    const userID = req.decoded.userID;
+    const books = req.body.books;
+
+    User.findByIdAndUpdate(userID, {
+        $addToSet: { books: { $each: books }}
+    }).then(user => {
+        return res.status(200).json({
+            success: true,
+            books: user.books
+        })
+    }).catch(next);
+})
+
 // Lấy tất cả các trade post của user
 router.get('/traderq', authenticate, (req, res, next) => {
     const userID = req.decoded.user;
@@ -124,5 +138,52 @@ router.put('/books/stash/:id', authenticate, (req, res, next) => {
         });
     }).catch(next);
 });
+
+// Đổi địa chỉ
+router.put('/address', authenticate, (req, res, next) => {
+    const userID = req.decoded.userID;
+
+    User.findByIdAndUpdate(userID, { $set: { address: req.body.address } })
+        .then((user) => {
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Không tìm thấy user"
+                });
+            }
+
+            return res.status.json({
+                success: true,
+                user: removeSensitiveData(user)
+            });
+        }).catch(next);
+});
+
+// Đổi sđt
+router.put('/numbers', authenticate, (req, res, next) => {
+    const userID = req.decoded.userID;
+
+    User.findByIdAndUpdate(userID, { $set: { phone: req.body.phone } })
+        .then((user) => {
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Không tìm thấy user"
+                });
+            }
+
+            return res.status.json({
+                success: true,
+                user: removeSensitiveData(user)
+            });
+        }).catch(next);
+});
+
+const removeSensitiveData = (user) => {
+	let userObj = user.toObject();
+	delete userObj.password;
+	delete userObj.providerUID;
+	return userObj;
+};
 
 module.exports = router;
