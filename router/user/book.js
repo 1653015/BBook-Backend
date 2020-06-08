@@ -85,8 +85,7 @@ router.get('/title/:name', (req, res, next) => {
 });
 
 // Nhập sách mới
-router.post('/', upload.single('bookImage'), (req, res, next) => {
-    console.log(req.file);
+router.post('/', (req, res, next) => {
     const book = new Book({
         name: req.body.name,
         image: req.body.bookImage,
