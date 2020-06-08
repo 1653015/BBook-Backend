@@ -143,8 +143,9 @@ router.put('/books/stash/:id', authenticate, (req, res, next) => {
 router.put('/address', authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
-    User.findByIdAndUpdate(userID, { $set: { address: req.body.address } })
-        .then((user) => {
+    User.findByIdAndUpdate(userID, {
+        $set: { address: req.body.address }
+    }).then((user) => {
             if (!user) {
                 return res.status(404).json({
                     success: false,
@@ -152,7 +153,7 @@ router.put('/address', authenticate, (req, res, next) => {
                 });
             }
 
-            return res.status.json({
+            return res.status(200).json({
                 success: true,
                 user: removeSensitiveData(user)
             });
@@ -172,7 +173,7 @@ router.put('/numbers', authenticate, (req, res, next) => {
                 });
             }
 
-            return res.status.json({
+            return res.status(200).json({
                 success: true,
                 user: removeSensitiveData(user)
             });
