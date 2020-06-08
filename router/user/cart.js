@@ -43,7 +43,7 @@ router.post('/validate', authenticate, (req, res, next) => {
 });
 
 // Trả lại item từ giở hàng
-router.put('/return', authenticate,(req, res, next) => {
+router.post('/return', authenticate, (req, res, next) => {
     const items = req.body.cart;
     let promises = [];
 
