@@ -40,7 +40,29 @@ router.post('/validate', authenticate, (req, res, next) => {
             return res.status(200).json({
                 cart: validatedCart
             })
-        })
+        }).catch(next);
 });
+
+// Trả lại item từ giở hàng
+router.put('/return', authenticate,(req, res, next) => {
+    const items = req.body.cart.items;
+    let promises = [];
+
+    items.forEach(item => {
+        promises.push(
+            Book.findByIdAndUpdate(item.id, {
+                $inc: { inStore: item.quant }
+            })
+        );
+    });
+
+    Promise.all(promises)
+        .then(() => {
+            return res.status(200).json({
+                success: true,
+                message: "Hoàn trả thành công"
+            })
+        }).catch(next);
+})
 
 module.exports = router;
