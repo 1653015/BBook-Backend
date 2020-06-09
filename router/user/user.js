@@ -180,6 +180,32 @@ router.put('/numbers', authenticate, (req, res, next) => {
         }).catch(next);
 });
 
+// Đổi mật khẩu
+router.put('/password', authenticate, (req, res, next) => {
+    const userID = req.decoded.userID;
+
+    User.findById(userID)
+        .then((user) => {
+            user.comparePassword(req.body.oldPassword, (err, matched) => {
+                if (matched) {
+                    user.password = req.body.newPassword;
+                    user.markModified('password');
+                    user.save();
+
+                    return res.status(200).json({
+                        success: true,
+                        message: "Đổi mật khẩu thành công"
+                    });
+                } else {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Mật khẩu hiện tại không đúng"
+                    });
+                }
+            })
+        }).catch(next);
+});
+
 const removeSensitiveData = (user) => {
 	let userObj = user.toObject();
 	delete userObj.password;

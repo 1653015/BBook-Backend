@@ -29,8 +29,6 @@ router.post('/email', (req, res, next) => {
             }
 
             user.comparePassword(req.body.password, (err, matched) => {
-                console.log(matched);
-                
                 if (!matched) {
 					return res.status(401).json({
 						success: false,
