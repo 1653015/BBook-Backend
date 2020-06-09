@@ -66,7 +66,9 @@ router.post('/auth-provider', (req, res, next) => {
                     books: [],
                     tradedBooks: [],
                     transactions: [],
-                    tradeRequests: []
+                    tradeRequests: [],
+                    name: req.body.name,
+                    email: req.body.email
                 });
 
                 newUser.save()
