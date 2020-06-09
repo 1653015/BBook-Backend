@@ -57,40 +57,45 @@ router.post('/auth-provider', (req, res, next) => {
     const provider = req.body.provider;
     const uid = req.body.uid;
 
-    User.find({provider: provider, providerUID: uid})
+    User.findOne({provider: provider, providerUID: uid})
         .then((user) => {
             if (!user) {
-                const user = new User({
+                let newUser = new User({
                     providerUID: uid,
-                    provider: provider
+                    provider: provider,
+                    books: [],
+                    tradedBooks: [],
+                    transactions: [],
+                    tradeRequests: []
                 });
 
-                user.save().then(user => {
-                    let token = jwt.sign({ userID: user._id },
-                        process.env.TOKEN_SECRET,
-                        { expiresIn: '24h' }
-                    );
+                newUser.save()
+                    .then((newUser) => {
+                        let token = jwt.sign({ userID: newUser._id },
+                            process.env.TOKEN_SECRET,
+                            { expiresIn: '24h' }
+                        );
+        
+                        return res.status(200).json({
+                                success: true,
+                                user: removeSensitiveData(newUser),
+                                message: "Đăng nhập thành công",
+                                token: token
+                            });
+                });
+            } else {
+                let token = jwt.sign({ userID: user._id },
+                    process.env.TOKEN_SECRET,
+                    { expiresIn: '24h' }
+                );
     
-                    return res.status(200).json({
-                            success: true,
-                            user: removeSensitiveData(user),
-                            message: "Đăng nhập thành công",
-                            token: token
-                        });
-                });
+                return res.status(200).json({
+                        success: true,
+                        user: removeSensitiveData(user),
+                        message: "Đăng nhập thành công",
+                        token: token,
+                    });
             }
-
-            let token = jwt.sign({ userID: user._id },
-                process.env.TOKEN_SECRET,
-                { expiresIn: '24h' }
-            );
-
-            return res.status(200).json({
-                    success: true,
-                    user: removeSensitiveData(user),
-                    message: "Đăng nhập thành công",
-                    token: token,
-                });
         }).catch(next);
 })
 

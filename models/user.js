@@ -64,8 +64,8 @@ user.methods.comparePassword = function(input, cb) {
 }
 
 user.pre('save', function(next) {
-	let user = this;
-
+    let user = this;
+    
     // only hash the password if it hasn't been modified (or is new)
     if (!user.isModified('password')) return next();
 
