@@ -110,15 +110,10 @@ router.get('/', authenticate, (req, res, next) => {
 router.get('/user', authenticate, (req, res, next) => {
     const userID = authenticate.userID;
 
-    const projection = {
-        op: 1,
-        book: 1,
-        interested: 0,
-        message: 0,
-        offers: 0
-    }
-
-    Traderq.find({op: userID}, projection)
+    Traderq.find({op: userID}, {
+            op: 1,
+            book: 1
+        })
         .then((posts) => {
             return res.status(200).json({
                 success: true,
