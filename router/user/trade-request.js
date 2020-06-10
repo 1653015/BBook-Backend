@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const {authenticate} = require('./middleware');
+const {authenticate, 
+    removeSensitiveDataFromBook, 
+    removeSensitiveDataFromUser} = require('./middleware');
 
 const User = require('../../models/user');
 const Offer = require('../../models/offer');
@@ -108,7 +110,12 @@ router.get('/', authenticate, (req, res, next) => {
 router.get('/user', authenticate, (req, res, next) => {
     const userID = authenticate.userID;
 
-    Traderq.find({op: userID})
+    const projection = {
+        op: 1,
+        book: 1
+    }
+
+    Traderq.find({op: userID}, projection)
         .then((posts) => {
             return res.status(200).json({
                 success: true,

@@ -29,6 +29,20 @@ authenticate = (req, res, next) => {
 	});
 }
 
+removeSensitiveDataFromUser = (user) => {
+	let userObj = user.toObject();
+	delete userObj.password;
+	delete userObj.providerUID;
+	return userObj;
+};
+
+removeSensitiveDataFromBook = (book) => {
+	let bookObj = book.toObject();
+	delete bookObj.inStore;
+	
+	return bookObj;
+};
+
 pushBackToStash = (req, res, next) => {
 	const pairA = req.body.pairA;
 	const pairB = req.body.pairB;
@@ -66,5 +80,7 @@ takeFromStash = (req, res, next) => {
 module.exports = {
 	authenticate,
 	pushBackToStash,
-	takeFromStash
+	takeFromStash,
+	removeSensitiveDataFromUser,
+	removeSensitiveDataFromBook
 }
