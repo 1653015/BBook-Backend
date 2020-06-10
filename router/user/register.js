@@ -142,10 +142,7 @@ router.get('/validate/:token', (req, res, next) => {
 
             user.save((err) => {
                 if (!err) {
-                    return res.status(200).json({
-                        success: true,
-                        message: "Kích hoạt tài khoản thành công"
-                    }).redirect('https://1653015.github.io/BBook-Frontend');
+                    return res.redirect('https://1653015.github.io/BBook-Frontend');
                 } else {
                     return res.status(400).json({
                         success: false,
