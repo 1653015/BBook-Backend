@@ -5,14 +5,14 @@ const traderq = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
         autopopulate: {
-            select: 'name '
+            select: 'name -_id'
         }
     },
     book: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'book',
         autopopulate: {
-            select: 'name image'
+            select: 'name image -_id'
         }
     },
     interested: {

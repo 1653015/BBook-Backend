@@ -112,7 +112,10 @@ router.get('/user', authenticate, (req, res, next) => {
 
     const projection = {
         op: 1,
-        book: 1
+        book: 1,
+        interested: 0,
+        message: 0,
+        offers: 0
     }
 
     Traderq.find({op: userID}, projection)
