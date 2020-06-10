@@ -95,9 +95,12 @@ router.delete('/:id', authenticate, (req, res, next) => {
 
 // Get all trade rq - user's traderq excluded
 router.get('/', authenticate, (req, res, next) => {
-    const userID = authenticate.userID;
+    const userID = req.decoded.userID;
 
-    Traderq.find({op: {$ne: userID}})
+    Traderq.find({op: {$ne: userID}}, {
+            op: 1,
+            book: 1
+        })
         .then((posts) => {
             return res.status(200).json({
                 success: true,
@@ -110,10 +113,7 @@ router.get('/', authenticate, (req, res, next) => {
 router.get('/user', authenticate, (req, res, next) => {
     const userID = authenticate.userID;
 
-    Traderq.find({op: userID}, {
-            op: 1,
-            book: 1
-        })
+    Traderq.find({op: userID})
         .then((posts) => {
             return res.status(200).json({
                 success: true,
