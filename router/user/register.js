@@ -124,7 +124,7 @@ router.post('/email-activation', (req, res, next) => {
     });
 });
 
-router.post('/validate/:token', (req, res, next) => {
+router.get('/validate/:token', (req, res, next) => {
     const token = req.params.token;
 
     User.findOne({resetPasswordToken: token})
