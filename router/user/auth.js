@@ -35,6 +35,13 @@ router.post('/email', (req, res, next) => {
 						message: 'Sai mật khẩu!',
 					});
                 }
+
+                if (!user.activated) {
+                    return res.status(401).json({
+						success: false,
+						message: 'Tài khoản chưa được kích hoạt',
+					});
+                }
                 
                 let token = jwt.sign({ userID: user._id },
                     process.env.TOKEN_SECRET,

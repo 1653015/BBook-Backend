@@ -64,6 +64,10 @@ const user = new mongoose.Schema({
         }],
         default: [],
     },
+    activated: {
+        type: Boolean,
+        default: false
+    },
     resetPasswordToken: String,
     resetPasswordTokenExpiration: Date
 });
