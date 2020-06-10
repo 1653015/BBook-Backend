@@ -30,5 +30,4 @@ const traderq = new mongoose.Schema({
     }
 });
 
-traderq.plugin(require('mongoose-autopopulate'));
 module.exports = mongoose.model('traderq', traderq);

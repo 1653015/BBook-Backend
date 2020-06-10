@@ -59,7 +59,6 @@ router.get('/books/:id', authenticate, (req, res, next) => {
     const offerID = req.params.id;
 
     Offer.findById(offerID, 'offering')
-        .populate('offering')
         .then((books) => {
             if (!books) {
                 return res.status(404).json({
