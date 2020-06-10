@@ -91,7 +91,7 @@ router.delete('/:id', authenticate, (req, res, next) => {
         }).catch(next);
 });
 
-// Get all trade rq
+// Get all trade rq - user's traderq excluded
 router.get('/', authenticate, (req, res, next) => {
     const userID = authenticate.userID;
 
