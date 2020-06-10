@@ -20,26 +20,26 @@ router.post('/', authenticate, (req, res, next) => {
                     success: false,
                     message: "Bạn đã có 1 bài đăng yêu cầu trao đổi tựa sách này"
                 });
+            } else {
+                const traderq = new Traderq({
+                    op: userID,
+                    book: req.body.book,
+                    interested: req.body.interested,
+                    message: req.body.message
+                });
+            
+                traderq.save().then((traderq) => {
+                    User.findByIdAndUpdate(userID, {
+                        $push: {tradeRequests: traderq._id}
+                    }).then(() => {
+                        return res.status(200).json({
+                            success: true,
+                            traderq: traderq
+                        });
+                    })
+                })
             }
-        })
-
-    const traderq = new Traderq({
-        op: userID,
-        book: req.body.book,
-        interested: req.body.interested,
-        message: req.body.message
-    });
-
-    traderq.save().then((traderq) => {
-        User.findByIdAndUpdate(userID, {
-            $push: {tradeRequests: traderq._id}
-        }).then(() => {
-            return res.status(200).json({
-                success: true,
-                traderq: traderq
-            });
-        })
-    }).catch(next);
+        }).catch(next);
 });
 
 // Lấy info 1 traderq request bằng ID
