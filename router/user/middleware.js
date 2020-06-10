@@ -33,6 +33,11 @@ removeSensitiveDataFromUser = (user) => {
 	let userObj = user.toObject();
 	delete userObj.password;
 	delete userObj.providerUID;
+	delete userObj.books;
+	delete userObj.email;
+	delete userObj.transactions;
+	delete userObj.tradeRequests;
+	delete userObj.resetPasswordToken;
 	return userObj;
 };
 

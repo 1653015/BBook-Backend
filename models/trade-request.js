@@ -12,7 +12,7 @@ const traderq = new mongoose.Schema({
     interested: {
         type: [{
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'book'
+            ref: 'book',
         }],
         default: []
     },

@@ -38,7 +38,8 @@ router.get('/:id', authenticate, (req, res, next) => {
 
     Traderq.findById(tradeID)
         .populate({
-            path: 'interested offers book'
+            path: 'interested offers book op',
+            select: '-inStore'
         })
         .then((traderq) => {
             if(!traderq) {
@@ -47,6 +48,8 @@ router.get('/:id', authenticate, (req, res, next) => {
                     message: "Không tìm thấy bài đăng này"
                 });
             }
+
+            traderq.op = removeSensitiveDataFromUser(traderq.op);
 
             return res.status(400).json({
                 success: true,
@@ -103,7 +106,7 @@ router.get('/', authenticate, (req, res, next) => {
         })
         .populate({
             path: 'op book',
-            select: 'name iamge'
+            select: 'name image'
         })
         .then((posts) => {
             return res.status(200).json({
@@ -125,19 +128,5 @@ router.get('/user', authenticate, (req, res, next) => {
             });
         }).catch(next);
 });
-
-// Lấy tất cả offer của 1 trade request
-router.get('/offer/:id', authenticate, (req, res, next) => {
-    const requestID = req.params.id;
-
-    Traderq.findById(requestID, 'offers')
-        .populate('offers')
-        .then((offers) => {
-            return res.status(200).json({
-                success: true,
-                offers: offers
-            });
-        }).catch(next);
-})
 
 module.exports = router;
