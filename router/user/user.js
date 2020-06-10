@@ -30,7 +30,7 @@ router.get("/", authenticate, (req, res, next) => {
 router.get('/books/stash', authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
-    User.findById(userID, 'books')
+    User.findById(userID, 'books -_id')
         .populate('books')
         .then((books) => {
             return res.status(200).json({
