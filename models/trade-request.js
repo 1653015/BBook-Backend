@@ -3,17 +3,11 @@ const mongoose = require('mongoose');
 const traderq = new mongoose.Schema({
     op: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
-        autopopulate: {
-            select: 'name -_id'
-        }
+        ref: 'user'
     },
     book: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'book',
-        autopopulate: {
-            select: 'name image -_id'
-        }
+        ref: 'book'
     },
     interested: {
         type: [{

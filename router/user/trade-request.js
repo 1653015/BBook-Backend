@@ -101,6 +101,10 @@ router.get('/', authenticate, (req, res, next) => {
             op: 1,
             book: 1
         })
+        .populate({
+            path: 'op book',
+            select: 'name iamge'
+        })
         .then((posts) => {
             return res.status(200).json({
                 success: true,
