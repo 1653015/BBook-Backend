@@ -118,7 +118,7 @@ router.get('/', authenticate, (req, res, next) => {
 
 // Get all my trade request
 router.get('/user', authenticate, (req, res, next) => {
-    const userID = authenticate.userID;
+    const userID = req.decoded.userID;
 
     Traderq.find({op: userID})
         .then((posts) => {
