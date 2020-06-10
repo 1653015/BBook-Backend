@@ -116,12 +116,15 @@ router.get('/', authenticate, (req, res, next) => {
         }).catch(next);
 });
 
-// Get all my trade request
-router.get('/user', authenticate, (req, res, next) => {
+router.post('/user', authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
     Traderq.find({op: userID})
-        .then((posts) => {
+        .populate({
+            path: 'book interested',
+            select: '-inStore'
+        })
+        .then(posts => {
             return res.status(200).json({
                 success: true,
                 posts: posts

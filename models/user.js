@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt'),
 	SALT_WORK_FACTOR = 10;
 
-const user = mongoose.Schema({
+const user = new mongoose.Schema({
     email: {
         type: String,
 		trim: true,
