@@ -51,7 +51,7 @@ router.get('/:id', authenticate, (req, res, next) => {
 
             traderq.op = removeSensitiveDataFromUser(traderq.op);
 
-            return res.status(400).json({
+            return res.status(200).json({
                 success: true,
                 traderq: traderq
             })
