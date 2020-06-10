@@ -44,7 +44,7 @@ router.get('/books/stash', authenticate, (req, res, next) => {
 router.get('/books/traded', authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
-    User.findById(userID, 'tradedBooks')
+    User.findById(userID, 'tradedBooks -_id')
         .then((books) => {
             return res.status(200).json({
                 success: true,
