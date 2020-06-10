@@ -136,7 +136,7 @@ router.get('/validate/:token', (req, res, next) => {
                 })
             }
             
-            user.validated = true;
+            user.activated = true;
             user.resetPasswordToken = undefined;
             user.resetPasswordExpires = undefined;
 
