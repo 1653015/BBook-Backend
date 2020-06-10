@@ -13,7 +13,7 @@ const Traderq = require('../../models/trade-request');
 router.post('/', authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
-    Traderq.findById(req.body.book)
+    Traderq.findOne({book: req.body.book})
         .then(traderq => {
             if (traderq) {
                 return res.status(400).json({
