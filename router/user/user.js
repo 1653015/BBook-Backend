@@ -55,7 +55,7 @@ router.get('/books/traded', authenticate, (req, res, next) => {
 });
 
 // Lấy tất cả các offer đến user này
-router.get('/offered', authenticate, (req, res, next) => {
+router.get('/offer/received', authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
     Offer.find({to: userID})
@@ -66,6 +66,19 @@ router.get('/offered', authenticate, (req, res, next) => {
             });
         }).catch(next);
 });
+
+// all sent offers
+router.get('/offer/sent', authenticate, (req, res, next) => {
+    const userID = req.decoded.userID;
+
+    Offer.find({from: userID})
+        .then((offers) => {
+            return res.status(200).json({
+                success: true,
+                offers: offers
+            });
+        }).catch(next);
+})
 
 router.put('/book/stash/add', authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
