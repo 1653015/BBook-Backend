@@ -27,7 +27,8 @@ const traderq = new mongoose.Schema({
             ref: 'offer'
         }],
         default: []
-    }
+    },
+    duration: Number
 });
 
 module.exports = mongoose.model('traderq', traderq);

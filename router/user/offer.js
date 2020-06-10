@@ -111,23 +111,28 @@ router.delete('/accept/:id', authenticate, (req, res, next) => {
                 $push: {tradedBooks: offer.offering}
             });
 
+            let now = new Date()
+            const reserveDays = 0;
+            Traderq.findById(offer.post)
+                .then(traderq => {
+                    reserveDays = traderq.duration;
+                });
+
             let trade = new Trade({
                 userA: offer.to,
                 bookA: offer.for,
                 userB: offer.from,
                 bookB: offer.offering,
-                deadLine: Date.now + new Date(7 * 86400000)
+                deadLine: now.setDate(now.getDate() + 7),
+                reserveDays: reserveDays
             });
 
             trade.save().then((trade) => {
-                Offer.findOneAndDelete(offerID)
-                    .then(() => {
-                        return res.status(200).json({
-                            success: true,
-                            message: 'Hoàn thành',
-                            trade: trade
-                        });
-                    })
+                return res.status(200).json({
+                    success: true,
+                    message: 'Hoàn thành',
+                    trade: trade
+                });
             })
         }).catch(next);
 });

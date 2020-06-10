@@ -10,13 +10,14 @@ const Trade = require('../../models/trade');
 // Start a trade session
 router.put('/begin/:id', (req, res, next) => {
     const tradeID = req.params.id;
+    let now = new Date();
 
     Trade.findByIdAndUpdate(tradeID, {
-        $set: {duration: Date.now() + req.body.duration, onGoing: true}
+        $set: {returnDeadline: now.setDate(now.getDate() + req.body.duration), onGoing: true}
     }).then(trade => {
         return res.status(200).json({
             success: true,
-            message: "Thành công"
+            trade: trade
         });
     }).catch(next);
 });
@@ -27,14 +28,15 @@ router.put('/finish/:id', (req, res, next) => {
 
     Trade.findById(tradeID)
         .then(trade => {
-            req.body.pairA = {
-                id: trade.userA,
-                book: trade.bookA
-            }
-            req.body.pairB = {
-                id: trade.userB,
-                book: trade.bookB
-            }
+            User.findByIdAndUpdate(trade.userA, {
+                $pull: {tradedBooks: trade.bookA},
+                $push: {Books: trade.bookA}
+            });
+
+            User.findByIdAndUpdate(trade.userB, {
+                $pull: {tradedBooks: trade.bookB},
+                $push: {Books: trade.bookB}
+            });
 
             Trade.findByIdAndDelete(tradeID)
                 .then(() => {
@@ -44,6 +46,6 @@ router.put('/finish/:id', (req, res, next) => {
                     });
                 });
         }).catch(next);
-}, pushBackToStash);
+});
 
 module.exports = router;

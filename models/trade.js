@@ -19,17 +19,17 @@ const trade = mongoose.model(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'book'
         },
-        deadLine: {
+        turninDeadline: {
             type: Date,
         },
         onGoing: {
             type: Boolean,
             default: false
         },
-        duration: {
+        returnDeadline: {
             type: Date,
-            default: 0
-        }
+        },
+        reserveDays: Number
     }),
 );
 
