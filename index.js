@@ -19,7 +19,7 @@ app.use('/uploads', express.static('uploads'));
 
 // Create connection to the database
 mongoose.connect(
-    process.env.TEST_CONNECTION_STRING,
+    process.env.DB_CONNECTION_STRING,
     { useNewUrlParser: true,
         useUnifiedTopology: true },
     () => { console.log('DB ready'); }
