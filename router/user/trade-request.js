@@ -13,6 +13,16 @@ const Traderq = require('../../models/trade-request');
 router.post('/', authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
+    Traderq.findById(req.body.book)
+        .then(traderq => {
+            if (traderq) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Bạn đã có 1 bài đăng yêu cầu trao đổi tựa sách này"
+                });
+            }
+        })
+
     const traderq = new Traderq({
         op: userID,
         book: req.body.book,
