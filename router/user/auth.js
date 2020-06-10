@@ -157,7 +157,7 @@ router.post('/forgot', (req, res, next) => {
     });
 });
 
-router.get('/reset/:token', (req, res, next) => {
+router.post('/reset/:token', (req, res, next) => {
     User.findOne({ resetPasswordToken: req.params.token })
         .then((user) => {
             if (!user) {
