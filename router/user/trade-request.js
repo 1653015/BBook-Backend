@@ -91,4 +91,30 @@ router.delete('/:id', authenticate, (req, res, next) => {
         }).catch(next);
 });
 
+// Get all trade rq
+router.get('/', authenticate, (req, res, next) => {
+    const userID = authenticate.userID;
+
+    Traderq.find({op: {$ne: userID}})
+        .then((posts) => {
+            return res.status(200).json({
+                success: true,
+                posts: posts
+            });
+        }).catch(next);
+});
+
+// Get all my trade request
+router.get('/user', authenticate, (req, res, next) => {
+    const userID = authenticate.userID;
+
+    Traderq.find({op: userID})
+        .then((posts) => {
+            return res.status(200).json({
+                success: true,
+                posts: posts
+            });
+        }).catch(next);
+});
+
 module.exports = router;
