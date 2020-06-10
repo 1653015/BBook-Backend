@@ -36,22 +36,34 @@ const user = mongoose.Schema({
         type: String,
         default: ""
     },
-    books: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'book'
-    }],
-    tradedBooks: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'book'
-    }],
-    transactions: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'transaction'
-    }],
-    tradeRequests: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'traderq'
-    }],
+    books: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'book'
+        }],
+        default: [],
+    },
+    tradedBooks: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'book'
+        }],
+        default: [],
+    },
+    transactions: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'transaction'
+        }],
+        default: [],
+    },
+    tradeRequests: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'traderq'
+        }],
+        default: [],
+    },
     resetPasswordToken: String,
     resetPasswordTokenExpiration: Date
 });
