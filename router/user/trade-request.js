@@ -110,6 +110,29 @@ router.delete('/:id', cors(), authenticate, (req, res, next) => {
         }).catch(next);
 });
 
+router.delete('/test/:id', cors(), authenticate, (req, res, next) => {
+    const tradeID = req.params.id;
+    let promises = [];
+    
+    Traderq.findById(tradeID)
+        .then((traderq) => {
+            traderq.offers.forEach(offer => {
+                promises.push(Offer.findByIdAndDelete(offer))
+            });
+        });
+
+    Promise.all(promises)
+        .then(() => {
+            Traderq.findByIdAndDelete(tradeID)
+                .then(() => {
+                    return res.status(200).json({
+                        success: true,
+                        message: "Đã xóa post thành công"
+                    });
+                })
+        }).catch(next);
+});
+
 // Get all trade rq - user's traderq excluded
 router.get('/', cors(), authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
