@@ -132,35 +132,35 @@ router.delete('/accept/:id', cors(), authenticate, (req, res, next) => {
             User.findByIdAndUpdate(userID, {
                 $pull: {books: offer.for},
                 $push: {tradedBooks: offer.for}
-            });
+            }).then(() => {
+                User.findByIdAndUpdate(offer.from, {
+                    $pull: {books: offer.offering},
+                    $push: {tradedBooks: offer.offering}
+                }).then(() => {
+                    Traderq.findById(offer.post)
+                        .then(traderq => {
+                            reserveDays = traderq.duration;
+                            let now = new Date()
+                            const reserveDays = 0;
 
-            User.findByIdAndUpdate(offer.from, {
-                $pull: {books: offer.offering},
-                $push: {tradedBooks: offer.offering}
-            });
+                            let trade = new Trade({
+                                userA: offer.to,
+                                bookA: offer.for,
+                                userB: offer.from,
+                                bookB: offer.offering,
+                                deadLine: now.setDate(now.getDate() + 7),
+                                reserveDays: reserveDays
+                            });
 
-            let now = new Date()
-            const reserveDays = 0;
-            Traderq.findById(offer.post)
-                .then(traderq => {
-                    reserveDays = traderq.duration;
-                });
-
-            let trade = new Trade({
-                userA: offer.to,
-                bookA: offer.for,
-                userB: offer.from,
-                bookB: offer.offering,
-                deadLine: now.setDate(now.getDate() + 7),
-                reserveDays: reserveDays
-            });
-
-            trade.save().then((trade) => {
-                return res.status(200).json({
-                    success: true,
-                    message: 'Hoàn thành',
-                    trade: trade
-                });
+                            trade.save().then((trade) => {
+                                return res.status(200).json({
+                                    success: true,
+                                    message: 'Hoàn thành',
+                                    trade: trade
+                                });
+                            });
+                        });
+                })
             })
         }).catch(next);
 });
