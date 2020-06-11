@@ -121,15 +121,14 @@ router.delete('/test/:id', cors(), authenticate, (req, res, next) => {
             });
         });
 
+    promises.push(Traderq.findByIdAndDelete(tradeID))
+
     Promise.all(promises)
         .then(() => {
-            Traderq.findByIdAndDelete(tradeID)
-                .then(() => {
-                    return res.status(200).json({
-                        success: true,
-                        message: "Đã xóa post thành công"
-                    });
-                })
+            return res.status(200).json({
+                success: true,
+                message: "Đã xóa post thành công"
+            });
         }).catch(next);
 });
 

@@ -133,7 +133,7 @@ router.delete('/accept/:id', cors(), authenticate, (req, res, next) => {
                 $pull: {books: offer.for},
                 $push: {tradedBooks: offer.for}
             }).then(() => {
-                User.findByIdAndUpdate(offer.from, {
+                User.findByIdAndUpdate(offer.to, {
                     $pull: {books: offer.offering},
                     $push: {tradedBooks: offer.offering}
                 }).then(() => {
