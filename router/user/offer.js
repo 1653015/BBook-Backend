@@ -74,8 +74,8 @@ router.get('/books/:id', authenticate, (req, res, next) => {
         }).catch(next);
 });
 
-// Dùng để từ chối 
-router.delete('/decline/:id', authenticate, (req, res, next) => {
+
+router.delete('/:id', authenticate, (req, res, next) => {
     const offerID = req.params.id;
 
     Offer.findByIdAndDelete(offerID)
@@ -84,6 +84,27 @@ router.delete('/decline/:id', authenticate, (req, res, next) => {
                 success: true,
                 message: "Xóa thành công"
             });
+        }).catch(next);
+})
+
+// Dùng để từ chối 
+router.delete('/decline/:id', authenticate, (req, res, next) => {
+    const offerID = req.params.id;
+
+    Offer.findById(offerID)
+        .then((offer) => {
+            Traderq.findByIdAndUpdate(offer.post, {
+                $pull: {offers: offer._id}
+            });
+        })
+        .then(() => {
+            Offer.findByIdAndDelete(offerID)
+                .then(() => {
+                    return res.status(200).json({
+                        success: true,
+                        message: "Xóa thành công"
+                    });
+                })
         }).catch(next);
 });
 
