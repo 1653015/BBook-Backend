@@ -3,6 +3,7 @@ const router = express.Router();
 
 const {authenticate} = require('./middleware');
 const async = require('async');
+const cors = require('cors');
 
 const User = require('../../models/user');
 const Offer = require('../../models/offer');
@@ -11,7 +12,7 @@ const Trade = require('../../models/trade');
 
 
 // new offer
-router.post('/', authenticate, (req, res, next) => {
+router.post('/', cors(), authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
     let offer = new Offer({
@@ -35,7 +36,7 @@ router.post('/', authenticate, (req, res, next) => {
 });
 
 // Lấy 1 offer
-router.get('/:id', authenticate, (req, res, next) => {
+router.get('/:id', cors(), authenticate, (req, res, next) => {
     const offerID = req.params.id;
 
     Offer.findById(offerID)
@@ -55,7 +56,7 @@ router.get('/:id', authenticate, (req, res, next) => {
 });
 
 // Lấy các tựa sách của 1 đề nghị
-router.get('/books/:id', authenticate, (req, res, next) => {
+router.get('/books/:id', cors(), authenticate, (req, res, next) => {
     const offerID = req.params.id;
 
     Offer.findById(offerID, 'offering')
@@ -75,7 +76,7 @@ router.get('/books/:id', authenticate, (req, res, next) => {
 });
 
 
-router.delete('/:id', authenticate, (req, res, next) => {
+router.delete('/:id', cors(), authenticate, (req, res, next) => {
     const offerID = req.params.id;
 
     Offer.findById(offerID)
@@ -95,7 +96,7 @@ router.delete('/:id', authenticate, (req, res, next) => {
 })
 
 // Dùng để từ chối 
-router.delete('/decline/:id', authenticate, (req, res, next) => {
+router.delete('/decline/:id', cors(), authenticate, (req, res, next) => {
     const offerID = req.params.id;
 
     Offer.findById(offerID)
@@ -115,7 +116,7 @@ router.delete('/decline/:id', authenticate, (req, res, next) => {
 });
 
 // Dùng để accept offer - tạo 1 trade session
-router.delete('/accept/:id', authenticate, (req, res, next) => {
+router.delete('/accept/:id', cors(), authenticate, (req, res, next) => {
     const offerID = req.params.id;
     const userID = req.decoded.userID;
 

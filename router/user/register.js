@@ -2,12 +2,13 @@ const { registerValidation } = require('../../validation');
 const express = require('express');
 const router = express.Router();
 const User = require('../../models/user');
+const cors = require('cors');
 
 const nodemailer = require('nodemailer');
 const async = require('async');
 const crypto = require('crypto');
 
-router.post('/email', (req, res, next) => {
+router.post('/email', cors(), (req, res, next) => {
     const error = registerValidation(req.body);
 
     if (error.error) {
@@ -49,7 +50,7 @@ router.post('/email', (req, res, next) => {
         }).catch(next);
 });
 
-router.post('/email-activation', (req, res, next) => {
+router.post('/email-activation', cors(), (req, res, next) => {
     const error = registerValidation(req.body);
     
     if (error.error) {
@@ -124,7 +125,7 @@ router.post('/email-activation', (req, res, next) => {
     });
 });
 
-router.get('/validate/:token', (req, res, next) => {
+router.get('/validate/:token', cors(), (req, res, next) => {
     const token = req.params.token;
 
     User.findOne({resetPasswordToken: token})
