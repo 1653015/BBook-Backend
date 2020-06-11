@@ -119,16 +119,16 @@ router.delete('/test/:id', cors(), authenticate, (req, res, next) => {
             traderq.offers.forEach(offer => {
                 promises.push(Offer.findByIdAndDelete(offer))
             });
-        });
 
-    promises.push(Traderq.findByIdAndDelete(tradeID))
+            promises.push(Traderq.findByIdAndDelete(tradeID))
 
-    Promise.all(promises)
-        .then(() => {
-            return res.status(200).json({
-                success: true,
-                message: "Đã xóa post thành công"
-            });
+            Promise.all(promises)
+                .then(() => {
+                    return res.status(200).json({
+                        success: true,
+                        message: "Đã xóa post thành công"
+                    });
+                })
         }).catch(next);
 });
 
