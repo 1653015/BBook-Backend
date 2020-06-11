@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const cors = require('cors');
 
 const {authenticate, 
     removeSensitiveDataFromBook, 
@@ -10,7 +11,7 @@ const Offer = require('../../models/offer');
 const Traderq = require('../../models/trade-request');
 
 // Tạo post trao đổi
-router.post('/', authenticate, (req, res, next) => {
+router.post('/', cors(), authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
     Traderq.findOne({book: req.body.book})
@@ -43,7 +44,7 @@ router.post('/', authenticate, (req, res, next) => {
 });
 
 // Lấy info 1 traderq request bằng ID
-router.get('/:id', authenticate, (req, res, next) => {
+router.get('/:id', cors(), authenticate, (req, res, next) => {
     const tradeID = req.params.id;
 
     Traderq.findById(tradeID)
@@ -69,7 +70,7 @@ router.get('/:id', authenticate, (req, res, next) => {
 });
 
 // lấy tất cả offer của 1 traderq request
-router.get('/offer/:id', authenticate, (req, res, next) => {
+router.get('/offer/:id', cors(), authenticate, (req, res, next) => {
     const tradeID = req.params.id;
 
     Traderq.findByID(tradeID, 'offers')
@@ -90,7 +91,7 @@ router.get('/offer/:id', authenticate, (req, res, next) => {
 });
 
 // delete traderq post
-router.delete('/:id', authenticate, (req, res, next) => {
+router.delete('/:id', cors(), authenticate, (req, res, next) => {
     const tradeID = req.params.id;
     
     Traderq.findById(tradeID)
@@ -110,7 +111,7 @@ router.delete('/:id', authenticate, (req, res, next) => {
 });
 
 // Get all trade rq - user's traderq excluded
-router.get('/', authenticate, (req, res, next) => {
+router.get('/', cors(), authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
     Traderq.find({op: {$ne: userID}}, {
@@ -129,7 +130,7 @@ router.get('/', authenticate, (req, res, next) => {
         }).catch(next);
 });
 
-router.post('/user', authenticate, (req, res, next) => {
+router.post('/user', cors(), authenticate, (req, res, next) => {
     const userID = req.decoded.userID;
 
     Traderq.find({op: userID})

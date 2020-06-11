@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const cors = require('cors');
 
 const multer = require('multer');
 const  filter = (req, file, cb) => {
@@ -26,7 +27,7 @@ const upload = multer({
 const Book = require('../../models/book');
 
 // Lấy info tất cả các tựa sách
-router.get('/', (req, res, next) => {
+router.get('/', cors(), (req, res, next) => {
     Book.find({})
         .then((books) => {
             return res.status(200).json({
@@ -37,7 +38,7 @@ router.get('/', (req, res, next) => {
 });
 
 // Lấy info tựa sách bằng ID    
-router.get('/title/:id', (req, res, next) => {
+router.get('/title/:id', cors(), (req, res, next) => {
     const bookID = req.params.id;
 
     Book.findById(bookID)
@@ -61,7 +62,7 @@ router.get('/title/:id', (req, res, next) => {
 });
 
 // Lây tựa sách theo tên
-router.get('/title/:name', (req, res, next) => {
+router.get('/title/:name', cors(), (req, res, next) => {
     const name = req.params.name;
 
     Book.find({name: name})
@@ -85,7 +86,7 @@ router.get('/title/:name', (req, res, next) => {
 });
 
 // Nhập sách mới
-router.post('/', (req, res, next) => {
+router.post('/', cors(), (req, res, next) => {
     const book = new Book({
         name: req.body.name,
         image: req.body.bookImage,
@@ -111,7 +112,7 @@ router.post('/', (req, res, next) => {
 });
 
 // Nhập thêm sách cho 1 tựa sách
-router.put('/quant', (req, res, next) => {
+router.put('/quant', cors(), (req, res, next) => {
     const bookID = req.body.bookID;
     const quant = req.body.quant;
 
@@ -139,7 +140,7 @@ router.put('/quant', (req, res, next) => {
 });
 
 // Tìm tất cả các sách thuộc thể loại
-router.get('/category/:cat', (req, res, next) => {
+router.get('/category/:cat', cors(), (req, res, next) => {
     const category = req.params.cat;
 
     Book.find({categories: {$all: category}})
@@ -182,7 +183,7 @@ stockCheck = (req, res, next) => {
 }
 
 // Thêm category cho sách
-router.put('/category/add', (req, res, next) => {
+router.put('/category/add', cors(), (req, res, next) => {
     const bookID = req.body.bookID;
     const cats = req.body.cats;
 

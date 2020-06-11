@@ -16,7 +16,7 @@ router.get('/', cors(), (req, res, next) => {
 });
 
 // Thêm category
-router.post('/', (req, res, next) => {
+router.post('/', cors(), (req, res, next) => {
     const category = new Category({
         name: req.body.name
     });

@@ -84,12 +84,13 @@ router.delete('/:id', authenticate, (req, res, next) => {
                 $pull: {offers: offer._id}
             });
         }).then(() => {
-            Offer.findByIdAndDelete(offerID);
-        }).then(() => {
-            return res.status(200).json({
-                success: true,
-                message: "Xóa thành công"
-            });
+            Offer.findByIdAndDelete(offerID)
+                .then(() => {
+                    return res.status(200).json({
+                        success: true,
+                        message: "Xóa thành công"
+                    });
+                })
         }).catch(next);
 })
 

@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const cors = require('cors');
 
 const Cart = require('../../models/cart');
 const Book = require('../../models/book');
 const {authenticate} = require('./middleware');
 
 // kiểm tra item của cart
-router.post('/validate', authenticate, (req, res, next) => {
+router.post('/validate', cors(), authenticate, (req, res, next) => {
     const cart = req.body.cart;
     let validatedCart = {
         items: [],
@@ -43,7 +44,7 @@ router.post('/validate', authenticate, (req, res, next) => {
 });
 
 // Trả lại item từ giở hàng
-router.post('/return', authenticate, (req, res, next) => {
+router.post('/return', cors(), authenticate, (req, res, next) => {
     const items = req.body.cart;
     let promises = [];
 
