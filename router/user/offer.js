@@ -82,15 +82,15 @@ router.delete('/:id', authenticate, (req, res, next) => {
         .then((offer) => {
             Traderq.findByIdAndUpdate(offer.post, {
                 $pull: {offers: offer._id}
-            });
-        }).then(() => {
-            Offer.findByIdAndDelete(offerID)
-                .then(() => {
-                    return res.status(200).json({
-                        success: true,
-                        message: "Xóa thành công"
+            }).then(() => {
+                Offer.findByIdAndDelete(offerID)
+                    .then(() => {
+                        return res.status(200).json({
+                            success: true,
+                            message: "Xóa thành công"
+                        });
                     });
-                })
+            });
         }).catch(next);
 })
 
@@ -102,16 +102,15 @@ router.delete('/decline/:id', authenticate, (req, res, next) => {
         .then((offer) => {
             Traderq.findByIdAndUpdate(offer.post, {
                 $pull: {offers: offer._id}
-            });
-        })
-        .then(() => {
-            Offer.findByIdAndDelete(offerID)
-                .then(() => {
-                    return res.status(200).json({
-                        success: true,
-                        message: "Xóa thành công"
+            }).then(() => {
+                Offer.findByIdAndDelete(offerID)
+                    .then(() => {
+                        return res.status(200).json({
+                            success: true,
+                            message: "Xóa thành công"
+                        });
                     });
-                })
+            })
         }).catch(next);
 });
 
