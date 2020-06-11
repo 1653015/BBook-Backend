@@ -98,10 +98,13 @@ router.delete('/:id', authenticate, (req, res, next) => {
             traderq.offers.forEach(offer => {
                 Offer.findByIdAndDelete(offer);
             });
+        });
 
+    Traderq.findByIdAndDelete(tradeID)
+        .then(() => {
             return res.status(200).json({
                 success: true,
-                message: "Xóa thành công"
+                message: "Đã xóa post thành công"
             });
         }).catch(next);
 });
