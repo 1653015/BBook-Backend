@@ -78,8 +78,14 @@ router.get('/books/:id', authenticate, (req, res, next) => {
 router.delete('/:id', authenticate, (req, res, next) => {
     const offerID = req.params.id;
 
-    Offer.findByIdAndDelete(offerID)
+    Offer.findByIdA(offerID)
         .then(() => {
+            Traderq.findByIdAndUpdate(offer.post, {
+                $pull: {offers: offer._id}
+            });
+        }).then(() => {
+            Offer.findByIdAndDelete(offerID);
+        }).then(() => {
             return res.status(200).json({
                 success: true,
                 message: "Xóa thành công"
