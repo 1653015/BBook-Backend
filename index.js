@@ -10,6 +10,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 app.use('/', router);
+cors({credentials: true, origin: true});
 
 // Use Middlewares
 app.use(cors());
