@@ -78,8 +78,8 @@ router.get('/books/:id', authenticate, (req, res, next) => {
 router.delete('/:id', authenticate, (req, res, next) => {
     const offerID = req.params.id;
 
-    Offer.findByIdA(offerID)
-        .then(() => {
+    Offer.findById(offerID)
+        .then((offer) => {
             Traderq.findByIdAndUpdate(offer.post, {
                 $pull: {offers: offer._id}
             });
