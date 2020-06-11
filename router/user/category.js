@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const cors = require('cors');
 
 const Category = require('../../models/category');
 
 // Lấy tất cả các category
-router.get('/', (req, res, next) => {
+router.get('/', cors(), (req, res, next) => {
     Category.find({})
         .then(categories => {
             return res.status(200).json({
